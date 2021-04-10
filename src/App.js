@@ -6,6 +6,9 @@ import Heading from "./components/Heading";
 import Image from "./components/Image";
 import SearchBar from "./components/SearchBar";
 import debounce from "lodash.debounce";
+import Video from './components/Video'
+import Canvas from './components/Canvas'
+
 const api_key = process.env.REACT_APP_API_KEY;
 
 export default function App() {
@@ -18,11 +21,14 @@ export default function App() {
 
   window.onscroll = debounce(() => {
 
+     
+    
+
     if(error || isLoading || !hasMore) return
 
     if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight * 0.8 || nasaData.length === 1
     ) {
       searchHandler();
     }
@@ -30,7 +36,7 @@ export default function App() {
 
   const offsetDay = () => {
     let current = new Date();
-    let day = current.setDate(-1 * nasaData.length);
+    let day = current.setDate(current.getDate() -1 - (1 * nasaData.length));
     let date = new Date(day).toISOString().split("T")[0];
     console.log(date);
     return date;
@@ -55,46 +61,71 @@ export default function App() {
         let copy = [...nasaData];
         setIsLoading(false)
         setNasaData(copy.concat(response.data));
-      })
+      }).then((response) => {
+
+      }
+
+      )
       .catch((error) => {
         console.log(error);
         setError(error)
         setIsLoading(false)
       });
-  };
+  }
+
+  const checkHeight = () => {
+    if(window.innerHeight > document.documentElement.offsetHeight){
+      searchHandler()
+    }
+  }
+
+
   useEffect(searchHandler, []);
+  useEffect(checkHeight,[nasaData])
+
+
+
 
   const containerStyle = {
     maxWidth: "600px",
-    margin: "0 auto",
+    margin: "2rem auto",
     textAlign: "center",
-    fontFamily: "sans-serif"
+    fontFamily: "sans-serif",
+    borderRadius: '2%'
   };
 
   return (
     <div>
+      <Canvas></Canvas>
       {nasaData.map((image) => {
         return (
           <div style={containerStyle}>
             <React.Fragment key={image.date}>
               <Heading title={image.title}></Heading>
-              <Image
+              {image.media_type === 'image' ?<Image
+                title={image.title}
                 url={image.url}
                 explanation={image.explanation}
                 date={image.date}
-              ></Image>
+              ></Image> : <Video
+              title={image.title}
+                url={image.url}
+                explanation={image.explanation}
+                date={image.date}
+              ></Video>}
             </React.Fragment>
             {error &&
               <div style={{color: '#900'}}>
                 {error}
               </div>
             }
-            {isLoading &&
-              <div><h1 style={{color: "yellow"}}>Loading ...</h1></div>
-            }
+          
           </div>
         );
       })}
+        {isLoading &&
+              <div><h1 style={{color: "yellow"}}>Loading ...</h1></div>
+            }
     </div>
   );
 }

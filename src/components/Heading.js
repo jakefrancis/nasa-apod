@@ -8,7 +8,6 @@ const Heading = ({ title, url, date, explanation }) => {
 
   return (
     <div style={headingStyle}>
-      <h2>Nasa Image of The Day</h2>
       <h2>{title}</h2>
     </div>
   );

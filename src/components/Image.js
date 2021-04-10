@@ -1,6 +1,6 @@
 import React from "react";
 
-const Image = ({ url, explanation, date }) => {
+const Image = ({ title, url, explanation, date }) => {
   const containerStyle = {
     width: "90%",
     padding: "1rem 0",
@@ -9,7 +9,8 @@ const Image = ({ url, explanation, date }) => {
   };
 
   const pStyle = {
-    textAlign: "left"
+    textAlign: "left",
+    padding: "0 1rem"
   };
 
   const imgStyle = {
@@ -17,7 +18,7 @@ const Image = ({ url, explanation, date }) => {
   };
   return (
     <div style={containerStyle}>
-      <img style={imgStyle} src={url} alt={explanation} />
+      <img style={imgStyle} src={url} alt={title} />
       <p style={pStyle}>{explanation}</p>
       <h3>{date}</h3>
     </div>
