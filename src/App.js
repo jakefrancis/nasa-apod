@@ -97,6 +97,9 @@ export default function App() {
   return (
     <div>
       <Canvas></Canvas>
+      <div style={containerStyle}>
+        <Heading title={'NASA Astronomy Picture of the Day'}></Heading>
+      </div>
       {nasaData.map((image) => {
         return (
           <div style={containerStyle}>
