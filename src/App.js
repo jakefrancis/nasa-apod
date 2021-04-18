@@ -12,18 +12,16 @@ import Canvas from './components/Canvas'
 const api_key = process.env.REACT_APP_API_KEY;
 
 export default function App() {
-  const iodURL = "https://api.nasa.gov/planetary/apod?api_key=";
+  const iodURL = "http://192.168.0.121:3001/api/date/";
   const [nasaData, setNasaData] = useState([]);
   const [error, setError] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [date, setDate] = useState('')
+ 
 
-  window.onscroll = debounce(() => {
-
-     
+  window.onscroll = debounce(() => {  
     
-
     if(error || isLoading || !hasMore) return
 
     if (
@@ -36,7 +34,7 @@ export default function App() {
 
   const offsetDay = () => {
     let current = new Date();
-    let day = current.setDate(current.getDate() -1 - (1 * nasaData.length));
+    let day = current.setDate(current.getDate()  -   (1 * nasaData.length));
     let date = new Date(day).toISOString().split("T")[0];
     console.log(date);
     return date;
@@ -55,10 +53,11 @@ export default function App() {
 
   const searchHandler =  () => {
     setIsLoading(true)
+    let copy = [...nasaData];
+    let date = offsetDay()
     axios
-      .get(iodURL + api_key + "&date="  + offsetDay())
+      .get(iodURL + date)
       .then((response) => {
-        let copy = [...nasaData];
         setIsLoading(false)
         setNasaData(copy.concat(response.data));
       }).then((response) => {
@@ -67,9 +66,21 @@ export default function App() {
 
       )
       .catch((error) => {
-        console.log(error);
-        setError(error)
-        setIsLoading(false)
+        if(error.response.status === 400){
+          const missingPage = {
+            date: `Entry for ${date} could not be found`,
+            explanation: "",
+            url: null,
+            media_type: 'image',
+            title: 'Image Not Found',
+          }
+          setNasaData(copy.concat(missingPage))
+        }
+        else{
+          setError(error)
+          setIsLoading(false)
+        }
+        
       });
   }
 
@@ -80,7 +91,7 @@ export default function App() {
   }
 
 
-  useEffect(searchHandler, []);
+  //useEffect(searchHandler, []);
   useEffect(checkHeight,[nasaData])
 
 
