@@ -17,15 +17,21 @@ git clone https://github.com/jakefrancis/nasa-apod.git
 
 While in the root of the directory install required dependencies.
 
-```npm install```
+```
+npm install
+```
 
 To start the development server.
 
-```npm start```
+```
+npm start
+```
 
 To build the app.
 
-```npm run build```
+```
+npm run build
+```
 
 The completed app is found in /build
 
