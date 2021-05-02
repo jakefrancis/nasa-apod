@@ -11,7 +11,7 @@ import Canvas from './components/Canvas'
 const PORT = process.env.REACT_APP_PORT
 
 export default function App() {
-  const iodURL = `http://localhost:${PORT}/api/nasa/`;
+  const iodURL = `/api/nasa/`;
   const [nasaData, setNasaData] = useState([]);
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
