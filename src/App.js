@@ -4,25 +4,22 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Heading from "./components/Heading";
 import Image from "./components/Image";
-import SearchBar from "./components/SearchBar";
 import debounce from "lodash.debounce";
 import Video from './components/Video'
 import Canvas from './components/Canvas'
 
-const api_key = process.env.REACT_APP_API_KEY;
+const PORT = process.env.REACT_APP_PORT
 
 export default function App() {
-  const iodURL = "http://192.168.0.121:3001/api/date/";
+  const iodURL = `http://localhost:${PORT}/api/nasa/`;
   const [nasaData, setNasaData] = useState([]);
   const [error, setError] = useState(false)
-  const [hasMore, setHasMore] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const [date, setDate] = useState('')
  
 
   window.onscroll = debounce(() => {  
     
-    if(error || isLoading || !hasMore) return
+    if(error || isLoading) return
 
     if (
       window.innerHeight + document.documentElement.scrollTop >=
@@ -36,19 +33,7 @@ export default function App() {
     let current = new Date();
     let day = current.setDate(current.getDate()  -   (1 * nasaData.length));
     let date = new Date(day).toISOString().split("T")[0];
-    console.log(date);
     return date;
-  };
-
-  const changeHandler = (event) => {
-    setDate(event.target.value);
-  };
-
-  const nasaHook = () => {
-    const copy = [...nasaData];
-    axios
-      .get(iodURL + api_key)
-      .then((response) => setNasaData(copy.concat(response.data)));
   };
 
   const searchHandler =  () => {
@@ -113,8 +98,8 @@ export default function App() {
       </div>
       {nasaData.map((image) => {
         return (
-          <div style={containerStyle}>
-            <React.Fragment key={image.date}>
+          <div key={image.id} style={containerStyle}>
+            <React.Fragment >
               <Heading title={image.title}></Heading>
               {image.media_type === 'image' ?<Image
                 title={image.title}

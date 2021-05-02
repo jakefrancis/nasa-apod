@@ -158,7 +158,6 @@ const adjustDimensions = () => {
 }
 
 window.onresize = debounce(() => {
-  console.log('hello')
   adjustDimensions()
 })
 
