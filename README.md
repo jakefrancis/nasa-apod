@@ -7,7 +7,7 @@ The background is a randomly generated 'starfield' drawn using javascript's canv
 The colors of the stars are modeled after the real-life average colors of stars.
 
 
-#Installation
+# Installation
 
 Download or clone this repository.
 
