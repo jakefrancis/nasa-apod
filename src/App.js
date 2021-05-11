@@ -19,7 +19,7 @@ export default function App() {
 
   window.onscroll = debounce(() => {  
     
-    if(error || isLoading) return
+    if(isLoading) return
 
     if (
       window.innerHeight + document.documentElement.scrollTop >=
@@ -51,7 +51,7 @@ export default function App() {
 
       )
       .catch((error) => {
-        if(error.response.status === 400){
+          console.log('error')
           const missingPage = {
             date: `Entry for ${date} could not be found`,
             explanation: "",
@@ -59,13 +59,8 @@ export default function App() {
             media_type: 'image',
             title: 'Image Not Found',
           }
-          setNasaData(copy.concat(missingPage))
-        }
-        else{
-          setError(error)
-          setIsLoading(false)
-        }
-        
+          setNasaData(copy.concat(missingPage))   
+          setIsLoading(false)        
       });
   }
 
@@ -112,13 +107,7 @@ export default function App() {
                 explanation={image.explanation}
                 date={image.date}
               ></Video>}
-            </React.Fragment>
-            {error &&
-              <div style={{color: '#900'}}>
-                {error}
-              </div>
-            }
-          
+            </React.Fragment>          
           </div>
         );
       })}
